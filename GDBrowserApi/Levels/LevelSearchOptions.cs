@@ -1,5 +1,4 @@
-﻿using System.Collections.Specialized;
-using System.Linq;
+using System.Collections.Specialized;
 using System.Net;
 
 namespace GDBrowserApi.Levels
