@@ -5,11 +5,8 @@ namespace GDBrowserApi.Levels
 	/// <summary>
 	/// A user level.
 	/// </summary>
-	public class Level
+	public class Level : IJsonOnDeserialized
 	{
-		private bool? _hasDescription;
-		private bool? _hasCustomSong;
-
 		internal Level() { }
 
 		/// <summary>
@@ -30,7 +27,8 @@ namespace GDBrowserApi.Levels
 		/// <summary>
 		/// Gets a value indicating whether the level has a non-default description.
 		/// </summary>
-		public bool HasDescription => _hasDescription ??= Description != "(No description provided)";
+		[JsonIgnore]
+		public bool HasDescription { get; internal set; }
 
 		/// <summary>
 		/// Gets the unique player ID of the level's author.
@@ -46,9 +44,8 @@ namespace GDBrowserApi.Levels
 		/// <summary>
 		/// Gets the difficulty of the level.
 		/// </summary>
-		[JsonConverter(typeof(DifficultyConverter))]
+		[JsonIgnore]
 		public Difficulty Difficulty { get; internal set; }
-		//TODO maybe convert "difficulty": "Easy Demon" into { Difficulty = Demon, DemonDifficulty = Easy } or use json.net to be free from shitjsonapi issues
 
 		/// <summary>
 		/// Gets the demon difficulty of the level
@@ -193,7 +190,8 @@ namespace GDBrowserApi.Levels
 		/// <summary>
 		/// Gets a value indicating whether the level uses a custom song.
 		/// </summary>
-		public bool HasCustomSong => _hasCustomSong ??= CustomSongID is not null;
+		[JsonIgnore]
+		public bool HasCustomSong { get; internal set; }
 
 		/// <summary>
 		/// Gets the ID of the song used.
@@ -229,11 +227,32 @@ namespace GDBrowserApi.Levels
 		[JsonPropertyName("demonList")]
 		public ushort? DemonListPosition { get; internal set; }
 
-		//UNDONE uploaded ...
+		[JsonPropertyName("difficulty")]
+		internal string DifficultyData { get; set; } = null!;
 
-		//TODO xmldoc
-		internal int? Results { get; set; }
-		//TODO xmldoc
-		internal int? Pages { get; set; }
+		public virtual void OnDeserialized()
+		{
+			HasDescription = Description != "(No description provided)";
+			HasCustomSong = CustomSongID != null;
+			(Difficulty, DemonDifficulty) = ParseDifficultyData(DifficultyData);
+		}
+
+		private static (Difficulty difficulty, DemonDifficulty? demonDifficulty) ParseDifficultyData(string difficultyData)
+		{
+			var parts = difficultyData.Split(' ');
+			if (parts.Length is not 1 or 2)
+			{
+				throw new FormatException($"Input string was not in a correct format.")
+				{ Data = { [nameof(difficultyData)] = difficultyData } };
+			}
+
+			var difficulty = Enum.Parse<Difficulty>(parts[^1]);
+
+			DemonDifficulty? demonDifficulty = default;
+			if (parts.Length is not 1)
+				demonDifficulty = Enum.Parse<DemonDifficulty>(parts[0]);
+
+			return (difficulty, demonDifficulty);
+		}
 	}
 }
