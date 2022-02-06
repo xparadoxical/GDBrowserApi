@@ -1,4 +1,4 @@
-﻿namespace GDBrowserApi.Levels
+namespace GDBrowserApi.Levels
 {
 	/// <summary>
 	/// Contains all demon difficulties.

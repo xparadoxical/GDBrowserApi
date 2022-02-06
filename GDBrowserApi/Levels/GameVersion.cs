@@ -1,4 +1,4 @@
-﻿namespace GDBrowserApi.Levels
+namespace GDBrowserApi.Levels
 {
 	public enum GameVersion
 	{//TODO

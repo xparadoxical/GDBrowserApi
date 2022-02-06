@@ -1,4 +1,4 @@
-﻿namespace GDBrowserApi.Levels
+namespace GDBrowserApi.Levels
 {
 	/// <summary>
 	/// An <see langword="enum"/>-like class containing possible kinds of quick search.

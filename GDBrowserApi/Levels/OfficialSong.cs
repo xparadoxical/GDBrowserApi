@@ -1,4 +1,4 @@
-﻿namespace GDBrowserApi.Levels
+namespace GDBrowserApi.Levels
 {
 	/// <summary>
 	/// An <see langword="enum"/>-like <see langword="class"/> that enumerates all official Geometry Dash songs.
