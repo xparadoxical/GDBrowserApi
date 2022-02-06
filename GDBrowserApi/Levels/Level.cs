@@ -224,7 +224,7 @@ namespace GDBrowserApi.Levels
 
 		/// <summary>
 		/// Gets the position of the level on the extreme demon list (<see href="https://pointercrate.com"/>)
-		/// or <see langword="null"/> if <see cref="DemonDifficulty"/> is not <see cref="DemonDifficulty.Extreme"/>.
+		/// or <see langword="null"/> if the level is not on the list.
 		/// </summary>
 		[JsonPropertyName("demonList")]
 		public ushort? DemonListPosition { get; internal set; }
